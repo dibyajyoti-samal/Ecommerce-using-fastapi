@@ -1,16 +1,18 @@
 from fastapi import APIRouter,Depends
-from app.models import UserInput
-from app.database import get_db_session,SessionDep
-
+from app.models import User,UserRegister
+from app.database import SessionDep
 
 router = APIRouter()
 
-
 @router.post("/register")
-async def get_user(user_regi_detail:UserInput,session:SessionDep):
-    reg_user_data=UserInput(**user_regi_detail.model_dump())
-    session.add(reg_user_data)
+async def get_user(user_regi_detail:User,session:SessionDep):
+    new_user = UserRegister(**user_regi_detail.model_dump())
+    session.add(new_user)
     session.commit()
-    session.refresh(reg_user_data)
-    return reg_user_data
+    session.refresh(new_user)
+    return new_user
 
+@router.get("/getUser/{user_id}")
+async def get_user_detail(user_id:int,session:SessionDep):
+    get_user_data=session.get(User,user_id)
+    return get_user_data

@@ -1,10 +1,18 @@
-from pydantic import BaseModel,EmailStr
+from sqlmodel import SQLModel, Field
 
 
-class UserInput(BaseModel):
-    firstname:str
-    lastname:str
-    email:str
-    age:int
-    gender:str
+class User(SQLModel):
+    first_name: str
+    last_name: str
+    email: str
+ 
+    
 
+class UserRegister(User,table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    password:str
+    conpassword:str
+
+
+
+   
